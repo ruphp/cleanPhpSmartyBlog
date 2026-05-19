@@ -5,6 +5,7 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/src/bootstrap.php';
 require dirname(__DIR__) . '/src/db.php';
+require dirname(__DIR__) . '/src/post_queries.php';
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 
@@ -21,5 +22,5 @@ if ($path === '/db-check') {
 
 view('home.tpl', [
     'title' => 'Блог на чистом PHP',
-    'text' => 'Первая страница на смарти.',
+    'categories' => getHomeCategories(db()),
 ]);

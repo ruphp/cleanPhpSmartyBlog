@@ -10,6 +10,18 @@ Start containers:
 docker compose up -d --build
 ```
 
+Create tables:
+
+```bash
+docker compose exec -T mysql mysql -ublog -pblog_password blog < database/schema.sql
+```
+
+Add test data:
+
+```bash
+docker compose exec php php database/seed.php
+```
+
 Open:
 
 ```text
