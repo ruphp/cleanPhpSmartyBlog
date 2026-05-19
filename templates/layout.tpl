@@ -7,7 +7,7 @@
 </head>
 <body>
     <header>
-        <a href="/">Clean PHP Blog</a>
+        <a href="/">тут логотип сделать</a>
     </header>
 
     <main>
