@@ -20,7 +20,36 @@ if ($path === '/db-check') {
     exit;
 }
 
+$pdo = db();
+
+if ($path === '/category') {
+    $categoryId = max(1, (int) ($_GET['id'] ?? 0));
+    $sort = ($_GET['sort'] ?? 'date') === 'views' ? 'views' : 'date';
+    $page = max(1, (int) ($_GET['page'] ?? 1));
+    $perPage = 4;
+    $category = getCategory($pdo, $categoryId);
+
+    if ($category === null) {
+        echo 'Категория не найдена';
+        exit;
+    }
+
+    $totalPosts = countCategoryPosts($pdo, $categoryId);
+    $totalPages = max(1, (int) ceil($totalPosts / $perPage));
+    $page = min($page, $totalPages);
+
+    view('category.tpl', [
+        'title' => $category['title'],
+        'category' => $category,
+        'posts' => getCategoryPosts($pdo, $categoryId, $sort, $page, $perPage),
+        'sort' => $sort,
+        'page' => $page,
+        'totalPages' => $totalPages,
+    ]);
+    exit;
+}
+
 view('home.tpl', [
     'title' => 'Блог на чистом PHP',
-    'categories' => getHomeCategories(db()),
+    'categories' => getHomeCategories($pdo),
 ]);

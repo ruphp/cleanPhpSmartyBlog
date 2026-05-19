@@ -104,6 +104,42 @@ $posts = [
         'published_at' => '2026-05-14 18:00:00',
         'categories' => [3],
     ],
+    [
+        'image' => '/assets/images/post-coffee.png',
+        'title' => 'Короткая новость проекта',
+        'description' => 'Небольшое обновление о состоянии блога.',
+        'body' => 'В этой новости описаны последние изменения проекта и ближайшие планы.',
+        'views' => 16,
+        'published_at' => '2026-05-15 10:30:00',
+        'categories' => [0],
+    ],
+    [
+        'image' => '/assets/images/post-bag.png',
+        'title' => 'Простая работа с шаблонами',
+        'description' => 'Как передавать данные из PHP в Smarty-шаблон.',
+        'body' => 'PHP подготавливает данные, а Smarty отвечает за вывод HTML.',
+        'views' => 44,
+        'published_at' => '2026-05-16 13:00:00',
+        'categories' => [1],
+    ],
+    [
+        'image' => '/assets/images/post-portrait.png',
+        'title' => 'Чистый вид карточки',
+        'description' => 'Карточка статьи должна быть простой и читаемой.',
+        'body' => 'Хорошая карточка помогает быстро понять тему статьи и перейти к чтению.',
+        'views' => 28,
+        'published_at' => '2026-05-17 09:15:00',
+        'categories' => [2],
+    ],
+    [
+        'image' => '/assets/images/post-coffee.png',
+        'title' => 'Планирование этапов',
+        'description' => 'Почему проект удобно делать маленькими шагами.',
+        'body' => 'Небольшие этапы помогают чаще проверять результат и проще находить ошибки.',
+        'views' => 35,
+        'published_at' => '2026-05-18 17:45:00',
+        'categories' => [3],
+    ],
 ];
 
 foreach ($posts as $post) {
