@@ -49,6 +49,25 @@ if ($path === '/category') {
     exit;
 }
 
+if ($path === '/post') {
+    $postId = max(1, (int) ($_GET['id'] ?? 0));
+
+    addPostView($pdo, $postId);
+    $post = getPost($pdo, $postId);
+
+    if ($post === null) {
+        echo 'Статья не найдена';
+        exit;
+    }
+
+    view('post.tpl', [
+        'title' => $post['title'],
+        'post' => $post,
+        'relatedPosts' => getRelatedPosts($pdo, $postId, 3),
+    ]);
+    exit;
+}
+
 view('home.tpl', [
     'title' => 'Блог на чистом PHP',
     'categories' => getHomeCategories($pdo),

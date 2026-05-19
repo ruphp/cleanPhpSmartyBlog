@@ -94,3 +94,71 @@ function countCategoryPosts(PDO $pdo, int $categoryId): int
 
     return (int) $stmt->fetchColumn();
 }
+
+function getPost(PDO $pdo, int $postId): ?array
+{
+    $stmt = $pdo->prepare(
+        'SELECT id, image, title, description, body, views, published_at
+        FROM posts
+        WHERE id = :id'
+    );
+    $stmt->execute(['id' => $postId]);
+
+    $post = $stmt->fetch();
+
+    if (!$post) {
+        return null;
+    }
+
+    $post['date'] = date('d.m.Y', strtotime($post['published_at']));
+    $post['categories'] = getPostCategories($pdo, $postId);
+
+    return $post;
+}
+
+function getPostCategories(PDO $pdo, int $postId): array
+{
+    $stmt = $pdo->prepare(
+        'SELECT c.id, c.title
+        FROM categories c
+        INNER JOIN post_category pc ON pc.category_id = c.id
+        WHERE pc.post_id = :post_id
+        ORDER BY c.title'
+    );
+    $stmt->execute(['post_id' => $postId]);
+
+    return $stmt->fetchAll();
+}
+
+function addPostView(PDO $pdo, int $postId): void
+{
+    $stmt = $pdo->prepare('UPDATE posts SET views = views + 1 WHERE id = :id');
+    $stmt->execute(['id' => $postId]);
+}
+
+function getRelatedPosts(PDO $pdo, int $postId, int $limit): array
+{
+    $stmt = $pdo->prepare(
+        'SELECT DISTINCT p.id, p.image, p.title, p.description, p.published_at
+        FROM posts p
+        INNER JOIN post_category pc ON pc.post_id = p.id
+        WHERE p.id <> :post_id
+          AND pc.category_id IN (
+              SELECT category_id
+              FROM post_category
+              WHERE post_id = :post_id_for_category
+          )
+        ORDER BY p.published_at DESC
+        LIMIT :limit'
+    );
+    $stmt->bindValue('post_id', $postId, PDO::PARAM_INT);
+    $stmt->bindValue('post_id_for_category', $postId, PDO::PARAM_INT);
+    $stmt->bindValue('limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return array_map(static function (array $post): array {
+        $post['date'] = date('d.m.Y', strtotime($post['published_at']));
+
+        return $post;
+    }, $stmt->fetchAll());
+}
