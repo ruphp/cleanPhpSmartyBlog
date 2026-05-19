@@ -1,0 +1,39 @@
+name: clean_php_smarty_blog
+
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: clean_php_smarty_blog_nginx
+    ports:
+      - "${APP_PORT:-8080}:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+
+  php:
+    image: clean_php_smarty_blog_php
+    container_name: clean_php_smarty_blog_php
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - ./:/var/www/html
+
+  mysql:
+    image: mysql:8.4
+    container_name: clean_php_smarty_blog_mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-blog}
+      MYSQL_USER: ${MYSQL_USER:-blog_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-blog_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+    name: clean_php_smarty_blog_mysql_data
