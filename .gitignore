@@ -2,3 +2,7 @@
 .env
 
 /vendor/
+/var/cache/*
+/var/templates_c/*
+!/var/cache/.gitkeep
+!/var/templates_c/.gitkeep
