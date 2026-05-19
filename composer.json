@@ -1,0 +1,7 @@
+{
+  "name": "ruphp/clean-php-smarty-blog",
+  "require": {
+    "php": "^8.1",
+    "smarty/smarty": "^4.5"
+  }
+}
